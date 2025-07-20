@@ -13,7 +13,7 @@ from google.genai.types import (
 
 # --- 설정 ---
 # 요청에 명시된 프로젝트 및 위치 정보
-GOOGLE_CLOUD_PROJECT = "agentspace-42dot-poc"
+GOOGLE_CLOUD_PROJECT = ""
 GOOGLE_CLOUD_LOCATION = "us-central1"
 
 # 사용할 모델 이름
@@ -59,8 +59,6 @@ def create_session_task(thread_id: int):
                 await asyncio.sleep(SESSION_WAIT_TIME) 
                 
                 print(f"⌛ [Thread {thread_id:04d}] 10분 대기 완료. 세션을 종료합니다.")
-
-                session.close()  # 세션 종료
                 
             except Exception as e:
                 print(f"❌ [Thread {thread_id:04d}] 비동기 작업 중 오류 발생: {e}")
