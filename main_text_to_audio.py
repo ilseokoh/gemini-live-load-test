@@ -15,7 +15,7 @@ from google.genai.types import (
 
 # --- 설정 ---
 # 요청에 명시된 프로젝트 및 위치 정보
-GOOGLE_CLOUD_PROJECT = "agentspace-42dot-poc"
+GOOGLE_CLOUD_PROJECT = ""
 GOOGLE_CLOUD_LOCATION = "us-central1"
 
 # 사용할 모델 이름

@@ -204,4 +204,5 @@ __marimo__/
 
 # 
 audio/
+audio_weather/
 *.log
