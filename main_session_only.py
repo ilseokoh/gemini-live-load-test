@@ -17,8 +17,8 @@ GOOGLE_CLOUD_PROJECT = ""
 GOOGLE_CLOUD_LOCATION = "us-central1"
 
 # 사용할 모델 이름
-MODEL_ID = "gemini-live-2.5-flash-preview-native-audio"
-
+#MODEL_ID = "gemini-live-2.5-flash-preview-native-audio"
+MODEL_ID = "gemini-live-2.5-flash"
 # 생성할 스레드(세션)의 수
 NUM_THREADS = 5000
 

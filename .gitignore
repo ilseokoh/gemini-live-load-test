@@ -205,4 +205,6 @@ __marimo__/
 # 
 audio/
 audio_weather/
+audio_native/
+audio_weather_native/
 *.log
