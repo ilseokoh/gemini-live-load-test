@@ -84,7 +84,8 @@ Output: 음 내일 서울은 최고 기온 20도에 맑은 날씨가 예상됩�
 weather.wav: prompt_token_count=69 
 weather_noise.wav: prompt_token_count=69
 
-***잡음이 추가로 28초 들어갔지만 prompt.***
+***잡음이 추가로 28초 들어갔지만 prompt_token_count=69로 잡음이 없는 파일과 같다.***
+
 ***모델의 특성에 의해 상세 토큰에 Output Text Token 24 가 보인다.***
 
 ```python
@@ -108,7 +109,8 @@ Output: 내일 서울 날씨는 대체로 맑겠고요, 기온은 최저 18도�
 weather.wav: prompt_token_count=69 
 weather_noise.wav: prompt_token_count=69
 
-***잡음이 추가로 28초 들어갔지만 prompt ***
+***잡음이 추가로 28초 들어갔지만 prompt_token_count=69로 잡음이 없는 파일과 같다.***
+
 ***모델의 특성에 의해 상세 토큰에 Output Text Token 이 없고 Audio 토큰만 보인다.***
 
 ```python
