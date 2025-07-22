@@ -6,7 +6,7 @@ gcloud auth application-default set-quota-project [PROJECT_ID]
 
 python -m venv .venv
 source .venv/bin/activate
-pip install -f requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Start with log file
