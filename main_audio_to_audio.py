@@ -1,10 +1,12 @@
 import asyncio
 import os
+import io
 import threading
 import numpy as np
 import time
 from scipy.io import wavfile
 import soundfile as sf
+import librosa
 from pathlib import Path
 from google import genai
 from google.genai.types import (
@@ -18,21 +20,21 @@ from google.genai.types import (
 
 # --- 설정 ---
 # 요청에 명시된 프로젝트 및 위치 정보
-GOOGLE_CLOUD_PROJECT = ""
+GOOGLE_CLOUD_PROJECT = "cloud-llm-preview1"
 GOOGLE_CLOUD_LOCATION = "us-central1"
 
 # 사용할 모델 이름
-#MODEL_ID = "gemini-live-2.5-flash-preview-native-audio"
-MODEL_ID = "gemini-live-2.5-flash"
+MODEL_ID = "gemini-live-2.5-flash-preview-native-audio"
+#MODEL_ID = "gemini-live-2.5-flash"
 
 # 생성할 스레드(세션)의 수
-NUM_THREADS = 5000
+NUM_THREADS = 10 #5000
 
 # 각 스레드 생성 사이의 대기 시간 (초)
 THREAD_CREATION_DELAY = 1
 
 # 세션 연결 후 대기 시간 (초) - 10분
-SESSION_WAIT_TIME = 600
+SESSION_WAIT_TIME = 6 # 600
 
 TARGET_SAMPLE_RATE = 16000  # 16kHz로 변환
 
@@ -58,9 +60,15 @@ def create_session_task(thread_id: int):
             try:
                 start_time = time.time()  # 세션 연결 시작 시간 측정
                 # 지정된 모델로 Live 세션에 연결
-                async with client.aio.live.connect(model=MODEL_ID, config=LiveConnectConfig(response_modalities=[Modality.AUDIO], output_audio_transcription=AudioTranscriptionConfig(),),) as session:
-                    
-                    audio_bytes = Path("weather.wav").read_bytes()                    
+                async with client.aio.live.connect(model=MODEL_ID, config=LiveConnectConfig(response_modalities=[Modality.AUDIO],output_audio_transcription=AudioTranscriptionConfig(),),) as session:
+                    buffer = io.BytesIO()
+                    y, sr = librosa.load("weather.wav", sr=16000)
+                    sf.write(buffer, y, sr, format='RAW', subtype='PCM_16')
+                    buffer.seek(0)
+                    audio_bytes = buffer.read()
+
+                    #audio_bytes = Path("noise.wav").read_bytes()                    
+
                     await session.send_realtime_input(media=Blob(data=audio_bytes, mime_type="audio/wav;rate=16000"))
 
                     print(f"[Thread {thread_id:04d}] 메시지 전송 시작.")
@@ -93,6 +101,8 @@ def create_session_task(thread_id: int):
                     end_time = time.time()  # 세션 연결 종료 시간 측정
                     elapsed_time_ms = (end_time - start_time) * 1000  # 밀리초 단위로 계산
                     print(f"[Thread {thread_id:04d}] 메시지 전송 및 응답 받기 성공! (소요 시간: {elapsed_time_ms:.2f} ms)")
+                    
+                    print(message.usage_metadata)
 
                 # 요청에 따라 10분간 대기하여 세션 유지
                 await asyncio.sleep(SESSION_WAIT_TIME) 
